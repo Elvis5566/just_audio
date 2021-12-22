@@ -31,7 +31,10 @@
     if ([uri hasPrefix:@"file://"]) {
         item = [[IndexedPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:[[uri stringByRemovingPercentEncoding] substringFromIndex:7]]];
     } else {
-        item = [[IndexedPlayerItem alloc] initWithURL:[NSURL URLWithString:uri]];
+        NSString *mimeType = @"video/mp4; codecs=\"avc1.42E01E, mp4a.40.2\"";
+        NSURL *_url = [[NSURL alloc] initWithString: uri];
+        AVURLAsset * asset = [[AVURLAsset alloc] initWithURL: _url options:@{@"AVURLAssetOutOfBandMIMETypeKey": mimeType}];
+        item = [[IndexedPlayerItem alloc] initWithAsset: asset];
     }
     if (@available(macOS 10.13, iOS 11.0, *)) {
         // This does the best at reducing distortion on voice with speeds below 1.0
